@@ -1,0 +1,59 @@
+# Optional: `pip install mkdocs mkdocs-material && mkdocs serve` renders docs/ as a site.
+# The pages are plain markdown and read fine on GitHub without it.
+site_name: atlas-ml
+docs_dir: docs
+theme:
+  name: material
+  logo: assets/atlas-mark-dark.svg      # the light-on-dark artwork: the header bar is ink
+  favicon: assets/favicon.svg
+  # the three faces are imported by stylesheets/extra.css, which is also where they are named:
+  # one place decides the type, and the theme does not fetch Roboto behind its back.
+  font: false
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - navigation.instant
+    - toc.follow
+    - content.code.copy
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle: {icon: material/weather-night, name: dark}
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle: {icon: material/weather-sunny, name: light}
+
+copyright: atlas-ml &mdash; SuperLearner by pudovkin-research
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - tables
+  - pymdownx.superfences
+  - pymdownx.highlight: {anchor_linenums: true}
+  - toc: {permalink: true}
+
+# the reference generator lives beside the pages it writes; it is not a page
+exclude_docs: |
+  *.py
+  __pycache__/
+  assets/README.md
+nav:
+  - Home: index.md
+  - Preparing your data: data.md
+  - Choosing settings: choosing.md
+  - Concepts: concepts.md
+  - Parameters: parameters.md
+  - API: api.md
+  - Tutorials:
+      - Tabular data: tutorials/tabular.md
+      - Time series: tutorials/series.md
+      - Extending it: tutorials/extending.md

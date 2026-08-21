@@ -1,0 +1,465 @@
+/* atlas-ml — the site's whole design system.
+ *
+ * The pages are plain markdown and must read on GitHub as well as here, so nothing below
+ * requires a page to opt in: headings, tables, code and admonitions are styled by element.
+ * A new page needs no design work. The three classes that exist are documented here:
+ *
+ *   .gh-only   a block that belongs to the GitHub rendering only (the mark linking home)
+ *   .hero      the home page's opening block: mark, wordmark, attribution, thesis
+ *
+ * A page that opens with a paragraph gets it set as a lede automatically -- no class, because a
+ * class would have to survive GitHub's renderer too, and there it would print as text.
+ *
+ * The palette is the mark's own (docs/assets/README.md owns it). The accent is reserved: it
+ * marks the region where the charts agree, and on the page it does the same job — the active
+ * item, the underline you are on, and nothing else. It is never body text; at 3.3:1 on paper
+ * it would not carry one.
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+/* The pages are shared with the library's repository, where each one carries the mark as a link
+   home. On the site the theme header already does that, so the in-page copy is hidden rather than
+   deleted — the same markdown has to read correctly on GitHub. */
+.gh-only { display: none; }
+
+/* ── tokens ──────────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --atlas-ink:      #12253c;
+  --atlas-accent:   #d16631;
+  --atlas-paper:    #fbfaf6;
+  --atlas-night:    #0a111a;
+  --atlas-on-night: #e8e4dc;
+
+  --md-text-font: "IBM Plex Sans";
+  --md-code-font: "IBM Plex Mono";
+  --atlas-display: "Space Grotesk", "IBM Plex Sans", Helvetica, Arial, sans-serif;
+
+  /* the mark's palette, so the site is not teal around an ink-and-terracotta logo */
+  --md-primary-fg-color:        #12253c;
+  --md-primary-fg-color--light: #334965;
+  --md-primary-fg-color--dark:  #0a111a;
+  --md-accent-fg-color:         #d16631;
+}
+
+[data-md-color-scheme="default"] {
+  --md-default-bg-color:        var(--atlas-paper);
+  --md-default-fg-color:        #12253c;
+  --md-default-fg-color--light: rgba(18, 37, 60, 0.62);
+  --md-default-fg-color--lighter: rgba(18, 37, 60, 0.38);
+  --md-default-fg-color--lightest: rgba(18, 37, 60, 0.10);
+  --md-typeset-color:           #12253c;
+  --md-typeset-a-color:         #12253c;
+  --md-code-bg-color:           #f1eee5;
+  --md-code-fg-color:           #16283f;
+  /* all four, not just the base: the theme's footer is white-on-black by default, and the
+     derived two are what the copyright and the prev/next labels actually read. Overriding the
+     background alone leaves them white on paper. */
+  --md-footer-bg-color:          var(--atlas-paper);
+  --md-footer-bg-color--dark:    transparent;
+  --md-footer-fg-color:          #12253c;
+  --md-footer-fg-color--light:   rgba(18, 37, 60, 0.62);
+  --md-footer-fg-color--lighter: rgba(18, 37, 60, 0.50);
+
+  --atlas-rule:      rgba(18, 37, 60, 0.16);
+  --atlas-rule-soft: rgba(18, 37, 60, 0.08);
+  --atlas-muted:     rgba(18, 37, 60, 0.58);
+  --atlas-mark:      var(--atlas-accent);
+  --atlas-contour:   rgba(18, 37, 60, 0.10);
+}
+
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color:        var(--atlas-night);
+  --md-default-fg-color:        var(--atlas-on-night);
+  --md-default-fg-color--light: rgba(232, 228, 220, 0.62);
+  --md-default-fg-color--lighter: rgba(232, 228, 220, 0.38);
+  --md-default-fg-color--lightest: rgba(232, 228, 220, 0.10);
+  --md-typeset-color:           var(--atlas-on-night);
+  --md-typeset-a-color:         var(--atlas-on-night);
+  --md-code-bg-color:           #101a26;
+  --md-code-fg-color:           #dcd8d0;
+  --md-footer-bg-color:          var(--atlas-night);
+  --md-footer-bg-color--dark:    transparent;
+  --md-footer-fg-color:          var(--atlas-on-night);
+  --md-footer-fg-color--light:   rgba(232, 228, 220, 0.62);
+  --md-footer-fg-color--lighter: rgba(232, 228, 220, 0.50);
+
+  --atlas-rule:      rgba(232, 228, 220, 0.18);
+  --atlas-rule-soft: rgba(232, 228, 220, 0.09);
+  --atlas-muted:     rgba(232, 228, 220, 0.58);
+  /* the accent lifted just enough to hold on night; same hue, same job */
+  --atlas-mark:      #e2794a;
+  --atlas-contour:   rgba(232, 228, 220, 0.10);
+  --md-accent-fg-color: #e2794a;
+}
+
+/* ── type ────────────────────────────────────────────────────────────────────────────────── */
+
+.md-typeset {
+  font-size: 0.78rem;
+  line-height: 1.74;
+  letter-spacing: 0;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  font-family: var(--atlas-display);
+  color: var(--md-default-fg-color);
+  font-weight: 600;
+}
+
+.md-typeset h1 {
+  font-size: clamp(1.9rem, 1.45rem + 1.5vw, 2.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.2rem;
+}
+
+/* a section opens on a contour: one hairline the width of the measure, and the label above it */
+.md-typeset h2 {
+  font-size: 1.45rem;
+  line-height: 1.2;
+  letter-spacing: -0.012em;
+  margin: 2.6rem 0 0.9rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--atlas-rule);
+}
+
+.md-typeset h3 {
+  font-size: 1.06rem;
+  letter-spacing: -0.005em;
+  margin: 1.9rem 0 0.6rem;
+}
+
+.md-typeset h4 {
+  font-size: 0.86rem;
+  letter-spacing: 0.005em;
+  margin: 1.4rem 0 0.4rem;
+}
+
+/* the paragraph a page opens with carries it: one step up, and quieter than the body */
+.md-typeset h1 + p {
+  font-size: 0.93rem;
+  line-height: 1.56;
+  letter-spacing: -0.004em;
+  color: var(--atlas-muted);
+  margin-bottom: 1.7rem;
+}
+
+/* ...and a page that goes straight to its first section does not need a rule under the title */
+.md-typeset h1 + h2 {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 1.6rem;
+}
+
+.md-typeset strong { font-weight: 600; }
+
+/* headerlinks: a quiet ¶ that only colours on hover, so the accent stays scarce */
+.md-typeset .headerlink {
+  color: var(--md-default-fg-color--lightest);
+  transition: color 120ms;
+}
+.md-typeset :hover > .headerlink,
+.md-typeset .headerlink:focus { color: var(--atlas-mark); }
+
+/* ── links: ink type, accent underline. The colour never carries the meaning alone. ──────── */
+
+.md-typeset a {
+  color: var(--md-typeset-a-color);
+  text-decoration: underline;
+  text-decoration-color: var(--atlas-mark);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: text-decoration-thickness 100ms, background-color 100ms;
+}
+.md-typeset a:hover,
+.md-typeset a:focus {
+  color: var(--md-typeset-a-color);
+  text-decoration-thickness: 2px;
+}
+
+/* ── tables: the site's main content type, and it is full of numbers ─────────────────────── */
+
+.md-typeset table:not([class]) {
+  border: none;
+  border-top: 1px solid var(--atlas-rule);
+  border-bottom: 1px solid var(--atlas-rule);
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  font-size: 0.71rem;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+
+.md-typeset table:not([class]) th {
+  font-family: var(--md-code-font), monospace;
+  font-weight: 500;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--atlas-muted);
+  background: transparent;
+  border-bottom: 1px solid var(--atlas-rule);
+  padding: 0.5em 1em 0.5em 0;
+  vertical-align: bottom;
+}
+
+.md-typeset table:not([class]) td {
+  border-top: 1px solid var(--atlas-rule-soft);
+  padding: 0.62em 1em 0.62em 0;
+  vertical-align: top;
+}
+
+.md-typeset table:not([class]) tr:first-child td { border-top: none; }
+.md-typeset table:not([class]) tr:hover { background: transparent; }
+.md-typeset table:not([class]) th:last-child,
+.md-typeset table:not([class]) td:last-child { padding-right: 0; }
+
+/* an all-empty header row — the "| | |" index tables — should not leave a floating rule */
+.md-typeset table:not([class]) thead:has(th:empty):not(:has(th:not(:empty))) { display: none; }
+
+/* wide tables scroll inside their own box rather than pushing the page sideways */
+.md-typeset__scrollwrap { margin: 1.2rem 0; }
+
+/* ── code ───────────────────────────────────────────────────────────────────────────────── */
+
+.md-typeset code {
+  font-size: 0.86em;
+  padding: 0.1em 0.32em;
+  border-radius: 2px;
+  background: var(--md-code-bg-color);
+}
+
+.md-typeset table:not([class]) code { background: transparent; padding: 0; }
+
+.md-typeset pre > code {
+  border: 1px solid var(--atlas-rule-soft);
+  border-radius: 2px;
+  padding: 0.85rem 1rem;
+  line-height: 1.62;
+}
+
+.md-typeset .highlight { margin: 1.2rem 0; }
+
+.md-typeset .md-clipboard { color: var(--md-default-fg-color--lighter); }
+.md-typeset .md-clipboard:hover { color: var(--atlas-mark); }
+
+/* ── admonitions: a hairline box with a mono label. No fill, no icon tint. ──────────────── */
+
+.md-typeset .admonition,
+.md-typeset details {
+  border: 1px solid var(--atlas-rule);
+  border-left: 2px solid var(--atlas-mark);
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  font-size: 0.74rem;
+}
+
+.md-typeset .admonition-title,
+.md-typeset summary {
+  background: transparent;
+  border: none;
+  font-family: var(--md-code-font), monospace;
+  font-weight: 500;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--atlas-muted);
+}
+
+.md-typeset .admonition-title::before,
+.md-typeset summary::before { background-color: var(--atlas-mark); }
+
+.md-typeset blockquote {
+  border-left: 2px solid var(--atlas-rule);
+  color: var(--atlas-muted);
+}
+
+.md-typeset hr { border-bottom: 1px solid var(--atlas-rule); }
+
+/* ── chrome: header, nav, footer ─────────────────────────────────────────────────────────── */
+
+.md-header {
+  box-shadow: none;
+  border-bottom: 1px solid rgba(232, 228, 220, 0.14);
+}
+.md-header__title { font-family: var(--atlas-display); font-weight: 600; letter-spacing: 0.06em; }
+.md-header__topic:first-child { font-weight: 600; }
+.md-header__button.md-logo img { height: 1.5rem; width: 1.5rem; }
+
+.md-nav { font-size: 0.68rem; }
+.md-nav__title {
+  font-family: var(--md-code-font), monospace;
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--atlas-muted);
+}
+.md-nav__link {
+  border-left: 2px solid transparent;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+  transition: border-color 120ms, color 120ms;
+}
+.md-nav__link--active,
+.md-nav__link[aria-current="page"] {
+  color: var(--md-default-fg-color);
+  font-weight: 600;
+  border-left-color: var(--atlas-mark);
+}
+.md-nav__link:hover { color: var(--md-default-fg-color); }
+
+.md-sidebar--secondary .md-nav__link--active { border-left-color: var(--atlas-mark); }
+
+.md-search__form { border-radius: 2px; }
+.md-search__input { font-size: 0.72rem; }
+
+.md-footer { border-top: 1px solid var(--atlas-rule); }
+.md-footer-meta { background: transparent; }
+.md-copyright,
+.md-copyright__highlight {
+  font-family: var(--md-code-font), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  color: var(--atlas-muted);
+}
+html .md-footer-meta.md-typeset a { color: var(--atlas-muted); }
+html .md-footer-meta.md-typeset a:hover { color: var(--md-default-fg-color); }
+.md-footer__direction { color: var(--atlas-muted); }
+.md-footer__title { font-family: var(--atlas-display); font-weight: 600; }
+.md-footer__link { opacity: 1; }
+
+/* keyboard focus is never invisible */
+:focus-visible {
+  outline: 2px solid var(--atlas-mark);
+  outline-offset: 2px;
+}
+
+/* ── the home page's opening: the mark on its own field ─────────────────────────────────── */
+
+.md-typeset .hero {
+  position: relative;
+  text-align: center;
+  padding: var(--atlas-hero-pad) 0 2.2rem;
+  margin: 0 0 2.4rem;
+  border-bottom: 1px solid var(--atlas-rule);
+
+  --atlas-hero-pad: 1.6rem;
+  --atlas-mark-size: 132px;
+
+  /* Where the three charts agree. Their discs sit at (50, 33.5), (64.29, 58.25) and
+     (35.71, 58.25) in the mark's 100-unit space, so they meet at the centroid (50, 50) --
+     the point the artwork fills with the accent. The file's viewBox is "10.71 6.59 78.58
+     78.58", which puts that point at 50% across and 43.41/78.58 = 55.24% down the image.
+     Every number below is measured off the mark, so the field and the artwork cannot drift. */
+  --atlas-field-y: calc(var(--atlas-hero-pad) + 1.5rem + var(--atlas-mark-size) * 0.5524);
+  /* the artwork's own outer edge from that point: 16.5 to the top disc's centre plus its r=24,
+     over the 78.58 box */
+  --atlas-field-edge: calc(var(--atlas-mark-size) * 0.5154);
+  /* plus the clear space the brand asks for, one chart radius (24/78.58 of the artwork) */
+  --atlas-field-clear: calc(var(--atlas-mark-size) * 0.8208);
+}
+
+/* The isolines of the mark, continued past it — the same device at page scale, and the field
+   starts outside the mark's clear space rather than running under the artwork. */
+.md-typeset .hero::before {
+  content: "";
+  position: absolute;
+  top: -1.5rem;
+  left: 50%;
+  width: min(46rem, 160%);
+  height: 24rem;
+  transform: translateX(-50%);
+  background: repeating-radial-gradient(
+    circle at 50% var(--atlas-field-y),
+    transparent 0 15px,
+    var(--atlas-contour) 15px 16px
+  );
+  -webkit-mask-image: var(--atlas-field-mask);
+          mask-image: var(--atlas-field-mask);
+  --atlas-field-mask: radial-gradient(
+    circle at 50% var(--atlas-field-y),
+    transparent 0 var(--atlas-field-edge),
+    #000 var(--atlas-field-clear),
+    transparent 56%
+  );
+  pointer-events: none;
+}
+
+.md-typeset .hero > * { position: relative; }
+
+/* The mark, chosen by the SITE's scheme and not the operating system's. `<picture>` with a
+   `prefers-color-scheme` source is right on GitHub and wrong here: the header's toggle writes
+   `data-md-color-scheme`, which no media query can see, so a reader on a dark desktop who asked
+   this site for light kept the light-on-dark artwork. The markdown keeps the picture for GitHub
+   under `.gh-only`; here the mark is drawn from CSS, where the scheme is legible. */
+.md-typeset .hero .hero__mark {
+  display: block;
+  width: var(--atlas-mark-size);
+  height: var(--atlas-mark-size);
+  margin: 0 auto 1rem;
+  background: url("../assets/atlas-mark.svg") center / contain no-repeat;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .hero .hero__mark {
+  background-image: url("../assets/atlas-mark-dark.svg");
+}
+
+.md-typeset .hero h1 {
+  font-size: clamp(2.2rem, 1.6rem + 2.4vw, 3.4rem);
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  margin: 0 0 0.35rem;
+}
+
+.md-typeset .hero .hero__sub {
+  font-family: var(--md-code-font), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--atlas-muted);
+  margin: 0 0 1.3rem;
+}
+
+.md-typeset .hero .hero__thesis {
+  font-family: var(--atlas-display);
+  font-size: clamp(0.95rem, 0.8rem + 0.6vw, 1.18rem);
+  font-weight: 500;
+  line-height: 1.42;
+  letter-spacing: -0.01em;
+  max-width: 30rem;
+  margin: 0 auto;
+  text-wrap: balance;
+}
+
+.md-typeset .hero .hero__thesis em {
+  font-style: normal;
+  box-shadow: inset 0 -0.16em 0 rgba(209, 102, 49, 0.22);
+}
+
+/* one arrival, once, on load — and none of it if the reader asked for none */
+@media (prefers-reduced-motion: no-preference) {
+  .md-typeset .hero > * { animation: atlas-rise 520ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards; }
+  .md-typeset .hero .hero__mark { animation-delay: 40ms; }
+  .md-typeset .hero h1 { animation-delay: 110ms; }
+  .md-typeset .hero .hero__sub { animation-delay: 170ms; }
+  .md-typeset .hero .hero__thesis { animation-delay: 230ms; }
+}
+
+@keyframes atlas-rise {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media screen and (max-width: 44.98em) {
+  .md-typeset .hero { --atlas-mark-size: 92px; }
+  .md-typeset table:not([class]) { font-size: 0.68rem; }
+}
